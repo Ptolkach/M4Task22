@@ -32,9 +32,15 @@ namespace CopyGroupPlugin
 
                 XYZ point = uiDoc.Selection.PickPoint("Выберите точку");
 
+                //выбираем комнату
+                Room selectedRoom = GetRommByPoint(doc, point);
+                //находим центр комнаты
+                XYZ selectedRoomCenter = GetElementCenter(selectedRoom);
+
+
                 Transaction transaction = new Transaction(doc);
                 transaction.Start("Копирование группы объектов");
-                doc.Create.PlaceGroup(point, group.GroupType);
+                doc.Create.PlaceGroup((selectedRoomCenter+offset), group.GroupType);
                 transaction.Commit();
             }
             catch(Autodesk.Revit.Exceptions.OperationCanceledException)
